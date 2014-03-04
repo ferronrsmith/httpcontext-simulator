@@ -71,3 +71,7 @@ namespace UsingHttpSimulator
     }
 }
 ```
+
+### Nuget Plugin
+
+[HttpSimulator 1.0.0](http://www.nuget.org/packages/HttpSimulator/)
