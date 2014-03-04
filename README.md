@@ -7,6 +7,8 @@ a simulator used to simulate http context during integration testing
 ###Introduction
 The following shows how to use HttpSimulator?.
 
+View the [Sample App](https://github.com/ferronrsmith/-httpcontext-simulator-example)
+
 ```csharp
 using System;
 using System.Collections.Specialized;
