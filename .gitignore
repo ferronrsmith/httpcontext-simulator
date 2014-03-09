@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+*.userprefs
 
 # Build results
 
@@ -149,3 +150,9 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+
+# vagrant
+.vagrant
+
+# xml file that results from running nunit console
+TestResult.xml
