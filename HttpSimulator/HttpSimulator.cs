@@ -7,6 +7,9 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.SessionState;
+using Http.TestLibrary.BaseWrapped;
+using HttpContext = Http.TestLibrary.BaseWrapped.HttpContext;
+using HttpSessionState = Http.TestLibrary.BaseWrapped.HttpSessionState;
 
 namespace Http.TestLibrary
 {
@@ -120,7 +123,7 @@ namespace Http.TestLibrary
         /// <param name="headers"></param>
         protected virtual HttpSimulator SimulateRequest(Uri url, HttpVerb httpVerb, NameValueCollection formVariables, NameValueCollection headers)
         {
-            HttpContext.Current = null;
+            System.Web.HttpContext.Current = null;
 
             ParseRequestUrl(url);
 
@@ -143,7 +146,7 @@ namespace Http.TestLibrary
             if (headers != null)
                 _headers.Add(headers);
 
-            this.workerRequest = new SimulatedHttpRequest(ApplicationPath, PhysicalApplicationPath, PhysicalPath, Page, query, this.responseWriter, host, port, httpVerb.ToString());
+            this.workerRequest = new SimulatedHttpRequest(ApplicationPath, PhysicalApplicationPath, PhysicalPath, Page, query, this.responseWriter, host, port, httpVerb.ToString(), url);
 
             this.workerRequest.Form.Add(_formVars);
             this.workerRequest.Headers.Add(_headers);
@@ -162,15 +165,15 @@ namespace Http.TestLibrary
             Console.WriteLine("page: " + localPath);
             Console.WriteLine("pathPartAfterApplicationPart: " + _page);
             Console.WriteLine("appPhysicalDir: " + physicalApplicationPath);
-            Console.WriteLine("Request.Url.LocalPath: " + HttpContext.Current.Request.Url.LocalPath);
-            Console.WriteLine("Request.Url.Host: " + HttpContext.Current.Request.Url.Host);
-            Console.WriteLine("Request.FilePath: " + HttpContext.Current.Request.FilePath);
-            Console.WriteLine("Request.Path: " + HttpContext.Current.Request.Path);
-            Console.WriteLine("Request.RawUrl: " + HttpContext.Current.Request.RawUrl);
-            Console.WriteLine("Request.Url: " + HttpContext.Current.Request.Url);
-            Console.WriteLine("Request.Url.Port: " + HttpContext.Current.Request.Url.Port);
-            Console.WriteLine("Request.ApplicationPath: " + HttpContext.Current.Request.ApplicationPath);
-            Console.WriteLine("Request.PhysicalPath: " + HttpContext.Current.Request.PhysicalPath);
+            Console.WriteLine("Request.Url.LocalPath: " + System.Web.HttpContext.Current.Request.Url.LocalPath);
+            Console.WriteLine("Request.Url.Host: " + System.Web.HttpContext.Current.Request.Url.Host);
+            Console.WriteLine("Request.FilePath: " + System.Web.HttpContext.Current.Request.FilePath);
+            Console.WriteLine("Request.Path: " + System.Web.HttpContext.Current.Request.Path);
+            Console.WriteLine("Request.RawUrl: " + System.Web.HttpContext.Current.Request.RawUrl);
+            Console.WriteLine("Request.Url: " + System.Web.HttpContext.Current.Request.Url);
+            Console.WriteLine("Request.Url.Port: " + System.Web.HttpContext.Current.Request.Url.Port);
+            Console.WriteLine("Request.ApplicationPath: " + System.Web.HttpContext.Current.Request.ApplicationPath);
+            Console.WriteLine("Request.PhysicalPath: " + System.Web.HttpContext.Current.Request.PhysicalPath);
             Console.WriteLine("HttpRuntime.AppDomainAppPath: " + HttpRuntime.AppDomainAppPath);
             Console.WriteLine("HttpRuntime.AppDomainAppVirtualPath: " + HttpRuntime.AppDomainAppVirtualPath);
             Console.WriteLine("HostingEnvironment.ApplicationPhysicalPath: " + HostingEnvironment.ApplicationPhysicalPath);
@@ -185,16 +188,19 @@ namespace Http.TestLibrary
         {
             Type appFactoryType = Type.GetType("System.Web.HttpApplicationFactory, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             object appFactory = ReflectionHelper.GetStaticFieldValue<object>("_theApplicationFactory", appFactoryType);
-            ReflectionHelper.SetPrivateInstanceFieldValue("_state", appFactory, HttpContext.Current.Application);
+            if (appFactory==null)return;
+            ReflectionHelper.SetPrivateInstanceFieldValue("_state", appFactory, System.Web.HttpContext.Current.Application);
         }
 
         private void InitializeSession()
         {
-            HttpContext.Current = new HttpContext(workerRequest);
-            HttpContext.Current.Items.Clear();
-            HttpSessionState session = (HttpSessionState)ReflectionHelper.Instantiate(typeof(HttpSessionState), new Type[] { typeof(IHttpSessionState) }, new FakeHttpSessionState());
+            System.Web.HttpContext.Current = new System.Web.HttpContext(workerRequest);
+            System.Web.HttpContext.Current.Items.Clear();
+            var fakeHttpSessionState = new FakeHttpSessionState();
+            System.Web.SessionState.HttpSessionState session = (System.Web.SessionState.HttpSessionState)ReflectionHelper.Instantiate(typeof(System.Web.SessionState.HttpSessionState), new Type[] { typeof(IHttpSessionState) }, fakeHttpSessionState);
+            Context = new HttpContext(new BaseWrapped.SimulatedHttpRequest(workerRequest), new HttpSessionState(fakeHttpSessionState));
 
-            HttpContext.Current.Items.Add("AspSession", session);
+            System.Web.HttpContext.Current.Items.Add("AspSession", session);
         }
 
         public class FakeHttpSessionState : NameObjectCollectionBase, IHttpSessionState
@@ -636,6 +642,8 @@ namespace Http.TestLibrary
             get { return this.workerRequest; }
         }
 
+        public HttpContextBase Context { get; private set; }
+
         private SimulatedHttpRequest workerRequest;
 
         private static string ExtractQueryStringPart(Uri url)
@@ -652,7 +660,8 @@ namespace Http.TestLibrary
 
             // get singleton property value
             HttpRuntime runtime = ReflectionHelper.GetStaticFieldValue<HttpRuntime>("_theRuntime", typeof(HttpRuntime));
-
+            if (null == runtime) // 
+                return;
             // set app path property value
             ReflectionHelper.SetPrivateInstanceFieldValue("_appDomainAppPath", runtime, PhysicalApplicationPath);
             // set app virtual path property value
@@ -773,9 +782,9 @@ namespace Http.TestLibrary
         ///<filterpriority>2</filterpriority>
         public void Dispose()
         {
-            if (HttpContext.Current != null)
+            if (System.Web.HttpContext.Current != null)
             {
-                HttpContext.Current = null;
+                System.Web.HttpContext.Current = null;
             }
         }
     }

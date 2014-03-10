@@ -7,4 +7,4 @@ env:
 script: 
   - sudo apt-get install mono-devel nunit-console -y
   - bundle install 
-  - rake mono:build
+  - rake mono:test
