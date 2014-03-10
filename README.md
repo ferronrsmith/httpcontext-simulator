@@ -1,4 +1,4 @@
-httpcontext-simulator
+httpcontext-simulator [![Build Status](https://travis-ci.org/ferronrsmith/httpcontext-simulator.png)](https://travis-ci.org/ferronrsmith/httpcontext-simulator)
 =====================
 
 a simulator used to simulate http context during integration testing
