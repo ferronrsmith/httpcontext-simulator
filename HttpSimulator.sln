@@ -2,10 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpSimulator", "HttpSimulator\HttpSimulator.csproj", "{CE9FFE92-9A64-483C-9F11-A27F83C0E14C}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpSimulator.Tests", "HttpSimulator.Tests\HttpSimulator.Tests.csproj", "{7F177AF2-8C76-4E3C-93AA-C0EA5D23733F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +15,10 @@ Global
 		{CE9FFE92-9A64-483C-9F11-A27F83C0E14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE9FFE92-9A64-483C-9F11-A27F83C0E14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9FFE92-9A64-483C-9F11-A27F83C0E14C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F177AF2-8C76-4E3C-93AA-C0EA5D23733F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F177AF2-8C76-4E3C-93AA-C0EA5D23733F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F177AF2-8C76-4E3C-93AA-C0EA5D23733F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F177AF2-8C76-4E3C-93AA-C0EA5D23733F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

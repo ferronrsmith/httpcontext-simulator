@@ -29,7 +29,8 @@ namespace Http.TestLibrary
         /// <param name="host">Host.</param>
         /// <param name="port">Port to request.</param>
         /// <param name="verb">The HTTP Verb to use.</param>
-        public SimulatedHttpRequest(string applicationPath, string physicalAppPath, string physicalFilePath, string page, string query, TextWriter output, string host, int port, string verb)
+        /// <param name="url"></param>
+        public SimulatedHttpRequest(string applicationPath, string physicalAppPath, string physicalFilePath, string page, string query, TextWriter output, string host, int port, string verb, Uri url)
             : base(applicationPath, physicalAppPath, page, query, output)
         {
             if (host == null)
@@ -45,6 +46,7 @@ namespace Http.TestLibrary
             _verb = verb;
             _port = port;
             _physicalFilePath = physicalFilePath;
+            this.Uri = url;
         }
 
         internal void SetReferer(Uri referer)
@@ -103,6 +105,8 @@ namespace Http.TestLibrary
                 return formVariables;
             }
         }
+
+        public Uri Uri { get; private set; }
 
         private NameValueCollection formVariables = new NameValueCollection();
 
