@@ -198,7 +198,9 @@ namespace Http.TestLibrary
             System.Web.HttpContext.Current.Items.Clear();
             var fakeHttpSessionState = new FakeHttpSessionState();
             System.Web.SessionState.HttpSessionState session = (System.Web.SessionState.HttpSessionState)ReflectionHelper.Instantiate(typeof(System.Web.SessionState.HttpSessionState), new Type[] { typeof(IHttpSessionState) }, fakeHttpSessionState);
-            Context = new HttpContext(new BaseWrapped.SimulatedHttpRequest(workerRequest), new HttpSessionState(fakeHttpSessionState));
+            Context = new HttpContext(new BaseWrapped.SimulatedHttpRequest(workerRequest), 
+                new HttpSessionState(fakeHttpSessionState), 
+                new BaseWrapped.HttpServerUtility(new ConfigMapPath(this)));
 
             System.Web.HttpContext.Current.Items.Add("AspSession", session);
         }
@@ -471,6 +473,11 @@ namespace Http.TestLibrary
                 {
                     return true;
                 }
+            }
+
+            public bool GetIsReadOnly()
+            {
+                return IsReadOnly;
             }
         }
 

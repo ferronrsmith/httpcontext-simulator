@@ -59,6 +59,33 @@ namespace HttpSimulatorTests
                 Assert.AreEqual(new Uri("http://localhost/Test.aspx"), simulator.Context.Request.Url);
             }
         }
+
+        [Test]
+        public void CanSimulateSession()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"));
+
+                Assert.NotNull(simulator.Context.Session.SessionID);
+                simulator.Context.Session.Add("item","value");
+                Assert.AreEqual(1,simulator.Context.Session.Count);
+                Assert.AreEqual("value",simulator.Context.Session["item"]);
+            }
+        }
+
+        [Test,Ignore("Does not work on mono right now")]
+        public void CanSimulateMapPath()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"));
+
+                Assert.AreEqual("c:\\InetPub\\wwwRoot\\test\\test.js", simulator.Context.Server.MapPath("~/test/test.js"));
+                Assert.AreEqual("c:\\InetPub\\wwwRoot\\test.js", simulator.Context.Server.MapPath("test.js"));
+            }
+        }
+
         /// <summary>
         /// Determines whether this instance [can simulate form post].
         /// </summary>
