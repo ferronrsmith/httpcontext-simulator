@@ -13,7 +13,7 @@ namespace HttpSimulatorTests
         {
             using (new HttpSimulator("/", @"c:\inetpub\").SimulateRequest())
             {
-                Assert.NotNull(HttpContext.Current);
+				Assert.IsNotNull(HttpContext.Current);
             }
         }
 
@@ -29,6 +29,18 @@ namespace HttpSimulatorTests
                 Assert.AreEqual("Success", simulator.Context.Session["Test"]);
             }
         }
+
+		[Test]
+		public void CanSimulateFormGetWithQueryString() 
+		{
+			using (var simulator = new HttpSimulator()) {
+				var form = new NameValueCollection();
+				form.Add("Test1", "Value1");
+				form.Add("Test2", "Value2");
+				simulator.SimulateRequest (new Uri ("http://localhost/Test.aspx?Test1=Value1&Test2=Value2"));
+				Assert.AreEqual (form, simulator.Context.Request.QueryString);
+			}
+		}
 
         /// <summary>
         /// Determines whether this instance [can simulate form post].

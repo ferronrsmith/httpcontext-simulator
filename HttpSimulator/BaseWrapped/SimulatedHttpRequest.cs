@@ -64,6 +64,14 @@ namespace Http.TestLibrary.BaseWrapped
             }
         }
 
+		public override NameValueCollection QueryString
+		{
+			get 
+			{
+				return HttpUtility.ParseQueryString (_request.GetQueryString ());
+			}
+
+		}
             
         public SimulatedHttpRequest(TestLibrary.SimulatedHttpRequest request)
         {
