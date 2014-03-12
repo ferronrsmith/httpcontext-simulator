@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.SessionState;
 
@@ -260,5 +261,21 @@ namespace Http.TestLibrary.BaseWrapped
         {
             get { return session.IsSynchronized; }
         }
+
+        public override int Count
+        {
+            get { return session.Count; }
+        }
+
+        public override bool IsReadOnly
+        {
+            get { return session.GetIsReadOnly(); }
+        }
+
+        public override NameObjectCollectionBase.KeysCollection Keys
+        {
+            get { return session.Keys; }
+        }
+
     }
 }

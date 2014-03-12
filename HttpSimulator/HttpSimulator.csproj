@@ -57,6 +57,7 @@
     <Compile Include="ReflectionHelper.cs" />
     <Compile Include="SimulatedHttpRequest.cs" />
     <Compile Include="BaseWrapped\SimulatedHttpRequest.cs" />
+    <Compile Include="BaseWrapped\HttpServerUtility.cs" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
