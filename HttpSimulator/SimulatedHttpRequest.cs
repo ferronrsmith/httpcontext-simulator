@@ -137,6 +137,9 @@ namespace Http.TestLibrary
 
             if (index == 12 && this._verb == "POST")
                 return "application/x-www-form-urlencoded";
+                
+             if(index == 23)
+                return headers["Accept-Language"];
 
             return base.GetKnownRequestHeader(index);
         }
