@@ -156,3 +156,5 @@ $RECYCLE.BIN/
 
 # xml file that results from running nunit console
 TestResult.xml
+
+testrunner/

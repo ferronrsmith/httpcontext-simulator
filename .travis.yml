@@ -1,10 +1,15 @@
-language: java
-
+language: csharp
+solution: HttpSimulator.sln
 env:
   global:
-    - EnableNuGetPackageRestore=false
-
-script: 
-  - sudo apt-get install mono-devel nunit-console -y
-  - bundle install 
-  - rake mono:test
+    - EnableNuGetPackageRestore=true
+install:
+  - nuget restore HttpSimulator.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release HttpSimulator.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./HttpSimulator.Tests/bin/Release/HttpSimulator.Tests.dll
+mono:
+  - latest
+  - 3.12.0
+  - 3.10.0
