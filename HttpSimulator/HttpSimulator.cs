@@ -188,7 +188,8 @@ namespace Http.TestLibrary
         {
             Type appFactoryType = Type.GetType("System.Web.HttpApplicationFactory, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             object appFactory = ReflectionHelper.GetStaticFieldValue<object>("_theApplicationFactory", appFactoryType);
-            if (appFactory==null)return;
+            if (appFactory == null)
+                return;
             ReflectionHelper.SetPrivateInstanceFieldValue("_state", appFactory, System.Web.HttpContext.Current.Application);
         }
 
@@ -208,7 +209,8 @@ namespace Http.TestLibrary
         public class FakeHttpSessionState : NameObjectCollectionBase, IHttpSessionState
         {
             private string sessionID = Guid.NewGuid().ToString();
-            private int timeout = 30; //minutes
+            private int timeout = 30;
+            //minutes
             private bool isNewSession = true;
             private int lcid;
             private int codePage;
@@ -413,7 +415,7 @@ namespace Http.TestLibrary
             ///</returns>
             ///
             ///<param name="name">The key name of the session-state item value. </param>
-            public object this[string name]
+            public object this [string name]
             {
                 get { return BaseGet(name); }
                 set { BaseSet(name, value); }
@@ -428,7 +430,7 @@ namespace Http.TestLibrary
             ///</returns>
             ///
             ///<param name="index">The numerical index of the session-state item value. </param>
-            public object this[int index]
+            public object this [int index]
             {
                 get { return BaseGet(index); }
                 set { BaseSet(index, value); }

@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using NUnit.Framework;
 using Http.TestLibrary;
 using System.Web;
+
 namespace HttpSimulatorTests
 {
     [TestFixture]
@@ -13,7 +14,7 @@ namespace HttpSimulatorTests
         {
             using (new HttpSimulator("/", @"c:\inetpub\").SimulateRequest())
             {
-				Assert.IsNotNull(HttpContext.Current);
+                Assert.IsNotNull(HttpContext.Current);
             }
         }
 
@@ -30,17 +31,18 @@ namespace HttpSimulatorTests
             }
         }
 
-		[Test]
-		public void CanSimulateFormGetWithQueryString() 
-		{
-			using (var simulator = new HttpSimulator()) {
-				var form = new NameValueCollection();
-				form.Add("Test1", "Value1");
-				form.Add("Test2", "Value2");
-				simulator.SimulateRequest (new Uri ("http://localhost/Test.aspx?Test1=Value1&Test2=Value2"));
-				Assert.AreEqual (form, simulator.Context.Request.QueryString);
-			}
-		}
+        [Test]
+        public void CanSimulateFormGetWithQueryString()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                var form = new NameValueCollection();
+                form.Add("Test1", "Value1");
+                form.Add("Test2", "Value2");
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx?Test1=Value1&Test2=Value2"));
+                Assert.AreEqual(form, simulator.Context.Request.QueryString);
+            }
+        }
 
         /// <summary>
         /// Determines whether this instance [can simulate form post].
@@ -79,15 +81,15 @@ namespace HttpSimulatorTests
             {
                 simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"));
 
-				Assert.IsNotNull(simulator.Context.Session.SessionID);
-                simulator.Context.Session.Add("item","value");
-                Assert.AreEqual(1,simulator.Context.Session.Count);
-                Assert.AreEqual("value",simulator.Context.Session["item"]);
+                Assert.IsNotNull(simulator.Context.Session.SessionID);
+                simulator.Context.Session.Add("item", "value");
+                Assert.AreEqual(1, simulator.Context.Session.Count);
+                Assert.AreEqual("value", simulator.Context.Session["item"]);
             }
         }
 
         [Test]
-		[Platform(Exclude="Mono")]
+        [Platform(Exclude = "Mono")]
         public void CanSimulateMapPath()
         {
             using (var simulator = new HttpSimulator())
@@ -103,7 +105,7 @@ namespace HttpSimulatorTests
         /// Determines whether this instance [can simulate form post].
         /// </summary>
         [Test]
-		[Platform(Exclude="Mono")]
+        [Platform(Exclude = "Mono")]
         public void CanSimulateFormPostOnHttpContext()
         {
             using (var simulator = new HttpSimulator())

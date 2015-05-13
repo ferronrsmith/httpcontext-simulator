@@ -31,7 +31,7 @@ namespace Http.TestLibrary.BaseWrapped
         ///<param name="value">The value of the item to add to the session-state collection. </param>
         public override void Add(string name, object value)
         {
-            session.Add(name,value);
+            session.Add(name, value);
         }
 
         ///<summary>
@@ -216,7 +216,7 @@ namespace Http.TestLibrary.BaseWrapped
         ///</returns>
         ///
         ///<param name="name">The key name of the session-state item value. </param>
-        public override object this[string name]
+        public override object this [string name]
         {
             get { return session[name]; }
             set { session[name] = value; }
@@ -231,10 +231,10 @@ namespace Http.TestLibrary.BaseWrapped
         ///</returns>
         ///
         ///<param name="index">The numerical index of the session-state item value. </param>
-        public override object this[int index]
+        public override object this [int index]
         {
             get { return session[index]; }
-            set { session[index]=value; }
+            set { session[index] = value; }
         }
 
         ///<summary>

@@ -8,7 +8,9 @@ namespace Http.TestLibrary
     /// </summary>
     public sealed class ReflectionHelper
     {
-        private ReflectionHelper() { }
+        private ReflectionHelper()
+        {
+        }
 
         /// <summary>
         /// Returns the value of the private member specified.
@@ -128,7 +130,10 @@ namespace Http.TestLibrary
         /// <returns></returns>
         public static TReturn InvokeNonPublicMethod<TReturn>(Type type, string methodName, params object[] parameters)
         {
-            Type[] paramTypes = Array.ConvertAll(parameters, new Converter<object, Type>(delegate(object o) { return o.GetType(); }));
+            Type[] paramTypes = Array.ConvertAll(parameters, new Converter<object, Type>(delegate(object o)
+                    {
+                        return o.GetType();
+                    }));
 
             MethodInfo method = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static, null, paramTypes, null);
             if (method == null)
@@ -139,7 +144,10 @@ namespace Http.TestLibrary
 
         public static TReturn InvokeNonPublicMethod<TReturn>(object source, string methodName, params object[] parameters)
         {
-            Type[] paramTypes = Array.ConvertAll(parameters, new Converter<object, Type>(delegate(object o) { return o.GetType(); }));
+            Type[] paramTypes = Array.ConvertAll(parameters, new Converter<object, Type>(delegate(object o)
+                    {
+                        return o.GetType();
+                    }));
 
             MethodInfo method = source.GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance, null, paramTypes, null);
             if (method == null)

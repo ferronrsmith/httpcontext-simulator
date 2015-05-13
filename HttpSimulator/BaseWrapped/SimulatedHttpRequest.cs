@@ -12,6 +12,7 @@ namespace Http.TestLibrary.BaseWrapped
         {
             _request.SetReferer(referer);
         }
+
         /// <summary>
         /// Returns the specified member of the request header.
         /// </summary>
@@ -64,19 +65,20 @@ namespace Http.TestLibrary.BaseWrapped
             }
         }
 
-		public override NameValueCollection QueryString
-		{
-			get 
-			{
-				return HttpUtility.ParseQueryString (_request.GetQueryString ());
-			}
+        public override NameValueCollection QueryString
+        {
+            get
+            {
+                return HttpUtility.ParseQueryString(_request.GetQueryString());
+            }
 
-		}
-            
+        }
+
         public SimulatedHttpRequest(TestLibrary.SimulatedHttpRequest request)
         {
             _request = request;
         }
+
         /// <summary>
         /// Returns the virtual path to the currently executing
         /// server application.

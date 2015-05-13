@@ -36,7 +36,7 @@ namespace Http.TestLibrary
 
         IHttpHandler CurrentHandler { get; }
 
-        RequestNotification CurrentNotification { get;}
+        RequestNotification CurrentNotification { get; }
 
         Exception Error { get; }
 

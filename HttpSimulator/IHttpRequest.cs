@@ -65,7 +65,7 @@ namespace Http.TestLibrary
 
         bool IsSecureConnection { get; }
 
-        string this[string key] { get; }
+        string this [string key] { get; }
 
         WindowsIdentity LogonUserIdentity { [AspNetHostingPermission(SecurityAction.Demand, Level = AspNetHostingPermissionLevel.Medium)] get; }
 
