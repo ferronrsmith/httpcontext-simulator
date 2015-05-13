@@ -86,7 +86,8 @@ namespace HttpSimulatorTests
             }
         }
 
-        [Test,Ignore("Does not work on mono right now")]
+        [Test]
+		[Platform(Exclude="Mono")]
         public void CanSimulateMapPath()
         {
             using (var simulator = new HttpSimulator())
@@ -101,7 +102,8 @@ namespace HttpSimulatorTests
         /// <summary>
         /// Determines whether this instance [can simulate form post].
         /// </summary>
-        [Test,Ignore("Does not work on mono")]
+        [Test]
+		[Platform(Exclude="Mono")]
         public void CanSimulateFormPostOnHttpContext()
         {
             using (var simulator = new HttpSimulator())
