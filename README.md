@@ -1,4 +1,4 @@
-httpcontext-simulator [![Build Status](https://img.shields.io/travis/ferronrsmith/httpcontext-simulator.svg)](https://travis-ci.org/ferronrsmith/httpcontext-simulator) ![HttpSimulator](https://img.shields.io/nuget/v/HttpSimulator.svg) 
+httpcontext-simulator [![Build Status](https://img.shields.io/travis/ferronrsmith/httpcontext-simulator.svg)](https://travis-ci.org/ferronrsmith/httpcontext-simulator) [![HttpSimulator](https://img.shields.io/nuget/v/HttpSimulator.svg)](https://www.nuget.org/packages/HttpSimulator) 
 =====================
 
 A simple library used for simulating http context during unit or integration testing
