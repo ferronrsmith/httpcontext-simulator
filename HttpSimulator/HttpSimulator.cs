@@ -750,17 +750,18 @@ namespace Http.TestLibrary
 
             public string GetMachineConfigFilename()
             {
-                throw new NotImplementedException();
+                return System.Runtime.InteropServices.RuntimeEnvironment.SystemConfigurationFile;
             }
 
             public string GetRootWebConfigFilename()
             {
-                throw new NotImplementedException();
+                return null;
             }
 
             public void GetPathConfigFilename(string siteID, string path, out string directory, out string baseName)
             {
-                throw new NotImplementedException();
+                directory = _requestSimulation.PhysicalApplicationPath;
+                baseName = "Web.config";
             }
 
             public void GetDefaultSiteNameAndID(out string siteName, out string siteID)
