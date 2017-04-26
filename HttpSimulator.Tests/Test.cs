@@ -89,6 +89,16 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        public void CanSimulateUserAgent() {
+            using (var simulator = new HttpSimulator()) {
+                var headers = new NameValueCollection();
+                headers.Add("User-Agent", "Agent1");
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.POST, headers);
+                Assert.AreEqual("Agent1", simulator.Context.Request.UserAgent);
+            }
+        }
+
+        [Test]
         [Platform(Exclude = "Mono")]
         public void CanSimulateMapPath()
         {

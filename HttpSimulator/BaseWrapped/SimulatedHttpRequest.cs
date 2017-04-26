@@ -101,5 +101,11 @@ namespace Http.TestLibrary.BaseWrapped
             get { return _request.Uri; }
         }
 
+
+        public override string UserAgent {
+            get {
+                return _request.GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
+            }
+        }
     }
 }

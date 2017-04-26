@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
+using System.Web;
 using System.Web.Hosting;
 
 namespace Http.TestLibrary
@@ -132,16 +133,29 @@ namespace Http.TestLibrary
 
         public override string GetKnownRequestHeader(int index)
         {
-            if (index == 0x24)
-                return _referer == null ? string.Empty : _referer.ToString();
-
-            if (index == 12 && this._verb == "POST")
-                return "application/x-www-form-urlencoded";
-                
-            if (index == 23)
-                return headers["Accept-Language"];
-
+            switch (index) {
+                case HttpWorkerRequest.HeaderReferer:
+                    return _referer == null ? string.Empty : _referer.ToString();
+                case HttpWorkerRequest.HeaderContentType:
+                    string ct = headers["Content-Type"] ?? (_verb == "POST" ? "application/x-www-form-urlencoded" : null);
+                    if (ct != null)
+                        return ct;
+                    break;
+                case HttpWorkerRequest.HeaderAcceptLanguage:
+                    return headers["Accept-Language"];
+                case HttpWorkerRequest.HeaderUserAgent:
+                    return headers["User-Agent"];
+            }
             return base.GetKnownRequestHeader(index);
+        }
+
+        public override string GetServerVariable(string name)
+        {
+            switch (name) {
+                case "HTTP_USER_AGENT":
+                    return GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
+            }   
+            return base.GetServerVariable(name);
         }
 
         /// <summary>
