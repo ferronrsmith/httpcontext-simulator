@@ -99,6 +99,16 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        public void CanGetSetCookies() {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.POST);
+                simulator.Context.Response.Cookies.Add(new HttpCookie("a", "b"));
+                Assert.AreEqual("b", HttpContext.Current.Response.Cookies["a"].Value);
+            }
+        }
+
+        [Test]
         [Platform(Exclude = "Mono")]
         public void CanSimulateMapPath()
         {

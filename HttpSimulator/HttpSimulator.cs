@@ -201,7 +201,8 @@ namespace Http.TestLibrary
             System.Web.SessionState.HttpSessionState session = (System.Web.SessionState.HttpSessionState)ReflectionHelper.Instantiate(typeof(System.Web.SessionState.HttpSessionState), new Type[] { typeof(IHttpSessionState) }, fakeHttpSessionState);
             Context = new HttpContext(new BaseWrapped.SimulatedHttpRequest(workerRequest), 
                 new HttpSessionState(fakeHttpSessionState), 
-                new BaseWrapped.HttpServerUtility(new ConfigMapPath(this)));
+                new BaseWrapped.HttpServerUtility(new ConfigMapPath(this)),
+                System.Web.HttpContext.Current.Response);
 
             System.Web.HttpContext.Current.Items.Add("AspSession", session);
         }
