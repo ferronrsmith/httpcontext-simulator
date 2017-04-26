@@ -99,6 +99,7 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        [Platform(Exclude = "Mono")]
         public void CanGetSetCookies() {
             using (var simulator = new HttpSimulator())
             {
