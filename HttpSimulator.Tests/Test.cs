@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.IO;
 using NUnit.Framework;
 using Http.TestLibrary;
 using System.Web;
@@ -150,6 +151,72 @@ namespace HttpSimulatorTests
                 Assert.AreEqual("Value1", HttpContext.Current.Request.Form["Test1"]);
                 Assert.AreEqual("Value2", HttpContext.Current.Request.Form["Test2"]);
                 Assert.AreEqual(new Uri("http://localhost/Test.aspx"), HttpContext.Current.Request.Url);
+            }
+        }
+
+        [Test]
+        [Platform(Exclude = "Mono")]
+        public void CanWriteDebugInfoToSpecifiedWriter()
+        {
+            using (var debugWriter = new StringWriter())
+            {
+                using (var simulator = new HttpSimulator())
+                {
+                    simulator.DebugWriter = debugWriter;
+
+                    simulator.SimulateRequest();
+
+                    Assert.IsNotNullOrEmpty(debugWriter.ToString(), "Debug output");
+                }
+            }
+        }
+
+        [Test]
+        [Platform(Exclude = "Mono")]
+        public void CanDisableWritingDebugInfoToConsole()
+        {
+            using (var console = new ConsoleCapture())
+            {
+                using (var simulator = new HttpSimulator())
+                {
+                    simulator.DebugWriter = TextWriter.Null;
+                    simulator.SimulateRequest();
+                    Assert.IsEmpty(console.Out.ToString(), "Console.Out output");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Captures ouput that would go to the console.
+        /// </summary>
+        private class ConsoleCapture : IDisposable
+        {
+            private readonly TextWriter savedStdOut;
+            private readonly TextWriter savedStdErr;
+
+            public TextWriter Out { get; private set; } = new StringWriter();
+
+            public TextWriter Error { get; private set; } = new StringWriter();
+
+
+            public ConsoleCapture()
+            {
+                savedStdOut = Console.Out;
+                savedStdErr = Console.Error;
+
+                Console.SetOut(Out);
+                Console.SetError(Error);
+            }
+
+            public void Dispose()
+            {
+                Console.SetOut(savedStdOut);
+                Console.SetError(savedStdErr);
+
+                Out?.Dispose();
+                Out = null;
+                Error?.Dispose();
+                Error = null;
             }
         }
     }
