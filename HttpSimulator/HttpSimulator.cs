@@ -35,6 +35,7 @@ namespace Http.TestLibrary
         private Uri _referer;
         private NameValueCollection _formVars = new NameValueCollection();
         private NameValueCollection _headers = new NameValueCollection();
+        private TextWriter debugWriter = Console.Out;
 
         public HttpSimulator()
             : this("/", defaultPhysicalAppPath)
@@ -158,30 +159,45 @@ namespace Http.TestLibrary
 
             InitializeApplication();
 
-            #region Console Debug INfo
-
-            Console.WriteLine("host: " + host);
-            Console.WriteLine("virtualDir: " + applicationPath);
-            Console.WriteLine("page: " + localPath);
-            Console.WriteLine("pathPartAfterApplicationPart: " + _page);
-            Console.WriteLine("appPhysicalDir: " + physicalApplicationPath);
-            Console.WriteLine("Request.Url.LocalPath: " + System.Web.HttpContext.Current.Request.Url.LocalPath);
-            Console.WriteLine("Request.Url.Host: " + System.Web.HttpContext.Current.Request.Url.Host);
-            Console.WriteLine("Request.FilePath: " + System.Web.HttpContext.Current.Request.FilePath);
-            Console.WriteLine("Request.Path: " + System.Web.HttpContext.Current.Request.Path);
-            Console.WriteLine("Request.RawUrl: " + System.Web.HttpContext.Current.Request.RawUrl);
-            Console.WriteLine("Request.Url: " + System.Web.HttpContext.Current.Request.Url);
-            Console.WriteLine("Request.Url.Port: " + System.Web.HttpContext.Current.Request.Url.Port);
-            Console.WriteLine("Request.ApplicationPath: " + System.Web.HttpContext.Current.Request.ApplicationPath);
-            Console.WriteLine("Request.PhysicalPath: " + System.Web.HttpContext.Current.Request.PhysicalPath);
-            Console.WriteLine("HttpRuntime.AppDomainAppPath: " + HttpRuntime.AppDomainAppPath);
-            Console.WriteLine("HttpRuntime.AppDomainAppVirtualPath: " + HttpRuntime.AppDomainAppVirtualPath);
-            Console.WriteLine("HostingEnvironment.ApplicationPhysicalPath: " + HostingEnvironment.ApplicationPhysicalPath);
-            Console.WriteLine("HostingEnvironment.ApplicationVirtualPath: " + HostingEnvironment.ApplicationVirtualPath);
-
-            #endregion Console Debug INfo
+            WriteDebugInfo();
 
             return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="TextWriter"/> to use for writing out debugging information.
+        /// 
+        /// Set this to <c>TextWriter.Null</c> to disable debug output.
+        /// </summary>
+        /// <remarks>
+        /// By default, debug information is written out to the console. 
+        /// </remarks>
+        public TextWriter DebugWriter { set { debugWriter = value; } }
+
+        private void WriteDebugInfo()
+        {
+            if (debugWriter == null)
+            {
+                return;
+            }
+            debugWriter.WriteLine("host: " + host);
+            debugWriter.WriteLine("virtualDir: " + applicationPath);
+            debugWriter.WriteLine("page: " + localPath);
+            debugWriter.WriteLine("pathPartAfterApplicationPart: " + _page);
+            debugWriter.WriteLine("appPhysicalDir: " + physicalApplicationPath);
+            debugWriter.WriteLine("Request.Url.LocalPath: " + System.Web.HttpContext.Current.Request.Url.LocalPath);
+            debugWriter.WriteLine("Request.Url.Host: " + System.Web.HttpContext.Current.Request.Url.Host);
+            debugWriter.WriteLine("Request.FilePath: " + System.Web.HttpContext.Current.Request.FilePath);
+            debugWriter.WriteLine("Request.Path: " + System.Web.HttpContext.Current.Request.Path);
+            debugWriter.WriteLine("Request.RawUrl: " + System.Web.HttpContext.Current.Request.RawUrl);
+            debugWriter.WriteLine("Request.Url: " + System.Web.HttpContext.Current.Request.Url);
+            debugWriter.WriteLine("Request.Url.Port: " + System.Web.HttpContext.Current.Request.Url.Port);
+            debugWriter.WriteLine("Request.ApplicationPath: " + System.Web.HttpContext.Current.Request.ApplicationPath);
+            debugWriter.WriteLine("Request.PhysicalPath: " + System.Web.HttpContext.Current.Request.PhysicalPath);
+            debugWriter.WriteLine("HttpRuntime.AppDomainAppPath: " + HttpRuntime.AppDomainAppPath);
+            debugWriter.WriteLine("HttpRuntime.AppDomainAppVirtualPath: " + HttpRuntime.AppDomainAppVirtualPath);
+            debugWriter.WriteLine("HostingEnvironment.ApplicationPhysicalPath: " + HostingEnvironment.ApplicationPhysicalPath);
+            debugWriter.WriteLine("HostingEnvironment.ApplicationVirtualPath: " + HostingEnvironment.ApplicationVirtualPath);
         }
 
         private static void InitializeApplication()
