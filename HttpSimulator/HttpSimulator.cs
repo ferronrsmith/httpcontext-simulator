@@ -35,6 +35,7 @@ namespace Http.TestLibrary
         private Uri _referer;
         private NameValueCollection _formVars = new NameValueCollection();
         private NameValueCollection _headers = new NameValueCollection();
+        private NameValueCollection _serverVariables = new NameValueCollection();
         private TextWriter debugWriter = Console.Out;
 
         public HttpSimulator()
@@ -151,6 +152,7 @@ namespace Http.TestLibrary
 
             this.workerRequest.Form.Add(_formVars);
             this.workerRequest.Headers.Add(_headers);
+            this.workerRequest.ServerVariables.Add(_serverVariables);
 
             if (_referer != null)
                 this.workerRequest.SetReferer(_referer);
@@ -543,6 +545,23 @@ namespace Http.TestLibrary
                 throw new InvalidOperationException("Cannot set headers after calling Simulate().");
 
             _headers.Add(name, value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a server variable.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public HttpSimulator SetServerVariable(string name, string value)
+        {
+            //TODO: Change this ordering requirement.
+            if (this.workerRequest != null)
+                throw new InvalidOperationException("Cannot set server variable after calling Simulate().");
+
+            _serverVariables.Add(name, value);
 
             return this;
         }

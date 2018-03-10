@@ -107,5 +107,14 @@ namespace Http.TestLibrary.BaseWrapped
                 return _request.GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
             }
         }
+
+        public override NameValueCollection ServerVariables
+        {
+            get
+            {
+                return _request.ServerVariables;
+            }
+        }
+
     }
 }
