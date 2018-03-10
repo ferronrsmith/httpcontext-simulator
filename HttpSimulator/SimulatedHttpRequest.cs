@@ -112,6 +112,20 @@ namespace Http.TestLibrary
         private NameValueCollection formVariables = new NameValueCollection();
 
         /// <summary>
+        /// Gets the ServerVariables.
+        /// </summary>
+        /// <value>The ServerVariables.</value>
+        public NameValueCollection ServerVariables
+        {
+            get
+            {
+                return _serverVariables;
+            }
+        }
+
+        private NameValueCollection _serverVariables = new NameValueCollection();
+
+        /// <summary>
         /// Get all nonstandard HTTP header name-value pairs.
         /// </summary>
         /// <returns>An array of header name-value pairs.</returns>
@@ -154,8 +168,13 @@ namespace Http.TestLibrary
             switch (name) {
                 case "HTTP_USER_AGENT":
                     return GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
-            }   
-            return base.GetServerVariable(name);
+            }
+			var value = _serverVariables.Get(name);
+			if(value != null)
+			{
+				return value;
+            }
+			return base.GetServerVariable(name);
         }
 
         /// <summary>
