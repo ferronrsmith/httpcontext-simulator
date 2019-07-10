@@ -19,6 +19,7 @@ namespace Http.TestLibrary
         string _verb;
         int _port;
         string _physicalFilePath;
+        bool _isLocalRequest;
 
         /// <summary>
         /// Creates a new <see cref="SimulatedHttpRequest"/> instance.
@@ -55,6 +56,11 @@ namespace Http.TestLibrary
         internal void SetReferer(Uri referer)
         {
             _referer = referer;
+        }
+
+        internal void SetIsLocalRequest(bool isLocalRequest)
+        {
+            _isLocalRequest = isLocalRequest;
         }
 
         /// <summary>
@@ -246,6 +252,11 @@ namespace Http.TestLibrary
         public override IntPtr GetUserToken()
         {
             return _identity?.Token ?? base.GetUserToken();
+        }
+        
+        public override string GetRemoteAddress()
+        {
+            return _isLocalRequest ? "127.0.0.1" : "";
         }
     }
 }
