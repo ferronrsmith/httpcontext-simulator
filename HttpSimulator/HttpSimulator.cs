@@ -33,6 +33,7 @@ namespace Http.TestLibrary
         private const string defaultPhysicalAppPath = @"c:\InetPub\wwwRoot\";
         private StringBuilder builder;
         private Uri _referer;
+        private bool _isLocalRequest = true;
         private NameValueCollection _formVars = new NameValueCollection();
         private NameValueCollection _headers = new NameValueCollection();
         private TextWriter debugWriter = Console.Out;
@@ -154,6 +155,8 @@ namespace Http.TestLibrary
 
             if (_referer != null)
                 this.workerRequest.SetReferer(_referer);
+
+            this.workerRequest.SetIsLocalRequest(_isLocalRequest);
 
             InitializeSession();
 
@@ -510,6 +513,19 @@ namespace Http.TestLibrary
             if (this.workerRequest != null)
                 this.workerRequest.SetReferer(referer);
             this._referer = referer;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets whether it is a request from the local machine. Uses a fluent interface.
+        /// </summary>
+        /// <param name="isLocalRequest"></param>
+        /// <returns></returns>
+        public HttpSimulator SetIsLocalRequest(bool isLocalRequest)
+        {
+            if (this.workerRequest != null)
+                this.workerRequest.SetIsLocalRequest(isLocalRequest);
+            this._isLocalRequest = isLocalRequest;
             return this;
         }
 
