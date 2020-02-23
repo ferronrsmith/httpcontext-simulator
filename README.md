@@ -3,6 +3,14 @@ httpcontext-simulator [![Build Status](https://img.shields.io/travis/ferronrsmit
 
 A simple library used for simulating http context during unit or integration testing
 
+Can simulate:
+- form get with querystring
+- form post
+- session
+- user agent
+- cookie
+- browser capabilities
+- logon user identity
 
 ### Introduction
 The following shows how to use HttpSimulator?.
