@@ -112,6 +112,18 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        public void CanSimulateBrowser()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SetBrowser("browser", "IE");
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.GET);
+                Assert.NotNull(HttpContext.Current.Request.Browser);
+                Assert.AreEqual("IE", HttpContext.Current.Request.Browser.Capabilities["browser"]);
+            }
+        }
+
+        [Test]
         [Platform(Exclude = "Mono")]
         public void CanGetSetCookies() {
             using (var simulator = new HttpSimulator())

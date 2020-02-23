@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.SessionState;
-using Http.TestLibrary.BaseWrapped;
 using HttpContext = Http.TestLibrary.BaseWrapped.HttpContext;
 using HttpSessionState = Http.TestLibrary.BaseWrapped.HttpSessionState;
 
@@ -35,6 +34,7 @@ namespace Http.TestLibrary
         private Uri _referer;
         private NameValueCollection _formVars = new NameValueCollection();
         private NameValueCollection _headers = new NameValueCollection();
+        private NameValueCollection _browser = new NameValueCollection();
         private TextWriter debugWriter = Console.Out;
 
         public HttpSimulator()
@@ -151,6 +151,8 @@ namespace Http.TestLibrary
 
             this.workerRequest.Form.Add(_formVars);
             this.workerRequest.Headers.Add(_headers);
+            foreach(var key in _browser.AllKeys)
+                this.workerRequest.Browser.Capabilities.Add(key, _browser.Get(key));
 
             if (_referer != null)
                 this.workerRequest.SetReferer(_referer);
@@ -221,6 +223,7 @@ namespace Http.TestLibrary
                 System.Web.HttpContext.Current.Response);
 
             System.Web.HttpContext.Current.Items.Add("AspSession", session);
+            System.Web.HttpContext.Current.Request.Browser = workerRequest.Browser;
         }
 
         public class FakeHttpSessionState : NameObjectCollectionBase, IHttpSessionState
@@ -543,6 +546,23 @@ namespace Http.TestLibrary
                 throw new InvalidOperationException("Cannot set headers after calling Simulate().");
 
             _headers.Add(name, value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a browser capabilities.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public HttpSimulator SetBrowser(string name, string value)
+        {
+            //TODO: Change this ordering requirement.
+            if (this.workerRequest != null)
+                throw new InvalidOperationException("Cannot set browser capabilities after calling Simulate().");
+
+            _browser.Add(name, value);
 
             return this;
         }

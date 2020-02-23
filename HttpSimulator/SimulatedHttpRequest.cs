@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
@@ -96,9 +97,9 @@ namespace Http.TestLibrary
         private NameValueCollection headers = new NameValueCollection();
 
         /// <summary>
-        /// Gets the format exception.
+        /// Gets the Form.
         /// </summary>
-        /// <value>The format exception.</value>
+        /// <value>The Form.</value>
         public NameValueCollection Form
         {
             get
@@ -110,6 +111,16 @@ namespace Http.TestLibrary
         public Uri Uri { get; private set; }
 
         private NameValueCollection formVariables = new NameValueCollection();
+
+        public HttpBrowserCapabilities Browser
+        {
+            get
+            {
+                return browser;
+            }
+        }
+
+        private HttpBrowserCapabilities browser = new HttpBrowserCapabilities{ Capabilities = new Dictionary<string,string>() };
 
         /// <summary>
         /// Get all nonstandard HTTP header name-value pairs.
