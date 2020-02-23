@@ -114,6 +114,7 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        [Platform(Exclude = "Mono")]
         public void CanSimulateBrowser()
         {
             using (var simulator = new HttpSimulator())
