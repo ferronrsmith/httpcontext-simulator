@@ -101,6 +101,7 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        [Platform(Exclude = "Mono")]
         public void CanSimulateCookie()
         {
             using (var simulator = new HttpSimulator())
@@ -125,6 +126,7 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        [Platform(Exclude = "Mono")]
         public void CanSimulateIdentity()
         {
             var id = new WindowsIdentity(WindowsIdentity.GetCurrent().Token, 
