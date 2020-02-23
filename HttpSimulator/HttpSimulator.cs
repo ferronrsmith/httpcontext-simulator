@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -35,6 +36,7 @@ namespace Http.TestLibrary
         private NameValueCollection _formVars = new NameValueCollection();
         private NameValueCollection _headers = new NameValueCollection();
         private NameValueCollection _browser = new NameValueCollection();
+        private WindowsIdentity _identity;
         private TextWriter debugWriter = Console.Out;
 
         public HttpSimulator()
@@ -156,6 +158,9 @@ namespace Http.TestLibrary
 
             if (_referer != null)
                 this.workerRequest.SetReferer(_referer);
+
+            if (_identity != null)
+                this.workerRequest.SetIdentity(_identity);
 
             InitializeSession();
 
@@ -563,6 +568,23 @@ namespace Http.TestLibrary
                 throw new InvalidOperationException("Cannot set browser capabilities after calling Simulate().");
 
             _browser.Add(name, value);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets logon user identity.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public HttpSimulator SetIdentity(WindowsIdentity identity)
+        {
+            //TODO: Change this ordering requirement.
+            if (this.workerRequest != null)
+                throw new InvalidOperationException("Cannot set browser capabilities after calling Simulate().");
+
+            _identity = identity;
 
             return this;
         }

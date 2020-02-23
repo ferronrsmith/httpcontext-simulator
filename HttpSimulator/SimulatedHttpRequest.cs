@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
@@ -122,6 +123,13 @@ namespace Http.TestLibrary
 
         private HttpBrowserCapabilities browser = new HttpBrowserCapabilities{ Capabilities = new Dictionary<string,string>() };
 
+        internal void SetIdentity(WindowsIdentity identity)
+        {
+            _identity = identity;
+        }
+
+        private WindowsIdentity _identity = null;
+
         /// <summary>
         /// Get all nonstandard HTTP header name-value pairs.
         /// </summary>
@@ -167,7 +175,11 @@ namespace Http.TestLibrary
             switch (name) {
                 case "HTTP_USER_AGENT":
                     return GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
-            }   
+                case "AUTH_TYPE":
+                    return _identity != null ? _identity.AuthenticationType : base.GetServerVariable(name);
+                case "LOGON_USER":
+                    return _identity != null ? _identity.Name : base.GetServerVariable(name);
+            }
             return base.GetServerVariable(name);
         }
 
@@ -228,6 +240,12 @@ namespace Http.TestLibrary
         public override bool IsEntireEntityBodyIsPreloaded()
         {
             return true;
+        }
+
+        //GetLogonUserIdentity
+        public override IntPtr GetUserToken()
+        {
+            return _identity?.Token ?? base.GetUserToken();
         }
     }
 }

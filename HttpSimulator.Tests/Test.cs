@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Principal;
 using NUnit.Framework;
 using Http.TestLibrary;
 using System.Web;
@@ -120,6 +121,22 @@ namespace HttpSimulatorTests
                 simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.GET);
                 Assert.NotNull(HttpContext.Current.Request.Browser);
                 Assert.AreEqual("IE", HttpContext.Current.Request.Browser.Capabilities["browser"]);
+            }
+        }
+
+        [Test]
+        public void CanSimulateIdentity()
+        {
+            var id = new WindowsIdentity(WindowsIdentity.GetCurrent().Token, 
+                "Negotiate", WindowsAccountType.Normal, true);
+
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SetIdentity(id);
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.GET);
+                Assert.NotNull(HttpContext.Current.Request.LogonUserIdentity);
+                Assert.AreEqual("Negotiate", HttpContext.Current.Request.LogonUserIdentity.AuthenticationType);
+                Assert.IsNotEmpty(HttpContext.Current.Request.LogonUserIdentity.Name);
             }
         }
 
