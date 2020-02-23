@@ -145,6 +145,8 @@ namespace Http.TestLibrary
                     return headers["Accept-Language"];
                 case HttpWorkerRequest.HeaderUserAgent:
                     return headers["User-Agent"];
+                case HttpWorkerRequest.HeaderCookie:
+                    return headers["Cookie"];
             }
             return base.GetKnownRequestHeader(index);
         }

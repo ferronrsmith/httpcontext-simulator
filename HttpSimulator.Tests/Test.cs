@@ -100,6 +100,18 @@ namespace HttpSimulatorTests
         }
 
         [Test]
+        public void CanSimulateCookie()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                var headers = new NameValueCollection();
+                headers.Add("Cookie", "Cookie1=Value1");
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.POST, headers);
+                Assert.AreEqual("Value1", HttpContext.Current.Request.Cookies["Cookie1"].Value);
+            }
+        }
+
+        [Test]
         [Platform(Exclude = "Mono")]
         public void CanGetSetCookies() {
             using (var simulator = new HttpSimulator())
