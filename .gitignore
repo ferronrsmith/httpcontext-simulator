@@ -160,3 +160,5 @@ TestResult.xml
 testrunner/
 .axoCover/
 packages/
+
+.vs/
