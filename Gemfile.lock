@@ -3,7 +3,7 @@ GEM
   specs:
     albacore (0.3.6)
       rubyzip (< 1.0.0)
-    rake (10.1.1)
+    rake (12.3.3)
     rubyzip (0.9.9)
 
 PLATFORMS
