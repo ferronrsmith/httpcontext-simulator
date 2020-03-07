@@ -20,6 +20,27 @@ namespace HttpSimulatorTests
             }
         }
 
+        [Test]
+        public void RequestsAreLocalByDefault()
+        {
+            using (new HttpSimulator("/", @"c:\inetpub\").SimulateRequest())
+            {
+                Assert.IsTrue(HttpContext.Current.Request.IsLocal);
+            }
+        }
+
+        [Test]
+        public void CanSimulateRemoteRequests()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SetIsLocalRequest(false)
+                    .SimulateRequest(new Uri("http://something.com/Test.aspx"), HttpVerb.GET);
+
+                Assert.IsFalse(HttpContext.Current.Request.IsLocal);
+            }
+        }
+
         /// <summary>
         /// Determines whether this instance [can get set session].
         /// </summary>
