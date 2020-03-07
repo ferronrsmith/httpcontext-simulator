@@ -1,3 +1,6 @@
+# lock distribution
+dist: trusty
+
 language: csharp
 solution: HttpSimulator.sln
 env:
@@ -13,3 +16,4 @@ mono:
   - latest
   - 3.12.0
   - 3.10.0
+

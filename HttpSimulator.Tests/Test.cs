@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Principal;
 using NUnit.Framework;
 using Http.TestLibrary;
 using System.Web;
@@ -96,6 +97,49 @@ namespace HttpSimulatorTests
                 headers.Add("User-Agent", "Agent1");
                 simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.POST, headers);
                 Assert.AreEqual("Agent1", simulator.Context.Request.UserAgent);
+            }
+        }
+
+        [Test]
+        [Platform(Exclude = "Mono")]
+        public void CanSimulateCookie()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                var headers = new NameValueCollection();
+                headers.Add("Cookie", "Cookie1=Value1");
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.POST, headers);
+                Assert.AreEqual("Value1", HttpContext.Current.Request.Cookies["Cookie1"].Value);
+            }
+        }
+
+        [Test]
+        [Platform(Exclude = "Mono")]
+        public void CanSimulateBrowser()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SetBrowser("browser", "IE");
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.GET);
+                Assert.NotNull(HttpContext.Current.Request.Browser);
+                Assert.AreEqual("IE", HttpContext.Current.Request.Browser.Capabilities["browser"]);
+            }
+        }
+
+        [Test]
+        [Platform(Exclude = "Mono")]
+        public void CanSimulateIdentity()
+        {
+            var id = new WindowsIdentity(WindowsIdentity.GetCurrent().Token, 
+                "Negotiate", WindowsAccountType.Normal, true);
+
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SetIdentity(id);
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.GET);
+                Assert.NotNull(HttpContext.Current.Request.LogonUserIdentity);
+                Assert.AreEqual("Negotiate", HttpContext.Current.Request.LogonUserIdentity.AuthenticationType);
+                Assert.IsNotEmpty(HttpContext.Current.Request.LogonUserIdentity.Name);
             }
         }
 

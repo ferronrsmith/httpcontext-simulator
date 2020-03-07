@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
@@ -96,9 +98,9 @@ namespace Http.TestLibrary
         private NameValueCollection headers = new NameValueCollection();
 
         /// <summary>
-        /// Gets the format exception.
+        /// Gets the Form.
         /// </summary>
-        /// <value>The format exception.</value>
+        /// <value>The Form.</value>
         public NameValueCollection Form
         {
             get
@@ -110,6 +112,23 @@ namespace Http.TestLibrary
         public Uri Uri { get; private set; }
 
         private NameValueCollection formVariables = new NameValueCollection();
+
+        public HttpBrowserCapabilities Browser
+        {
+            get
+            {
+                return browser;
+            }
+        }
+
+        private HttpBrowserCapabilities browser = new HttpBrowserCapabilities{ Capabilities = new Dictionary<string,string>() };
+
+        internal void SetIdentity(WindowsIdentity identity)
+        {
+            _identity = identity;
+        }
+
+        private WindowsIdentity _identity = null;
 
         /// <summary>
         /// Get all nonstandard HTTP header name-value pairs.
@@ -145,6 +164,8 @@ namespace Http.TestLibrary
                     return headers["Accept-Language"];
                 case HttpWorkerRequest.HeaderUserAgent:
                     return headers["User-Agent"];
+                case HttpWorkerRequest.HeaderCookie:
+                    return headers["Cookie"];
             }
             return base.GetKnownRequestHeader(index);
         }
@@ -154,7 +175,11 @@ namespace Http.TestLibrary
             switch (name) {
                 case "HTTP_USER_AGENT":
                     return GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
-            }   
+                case "AUTH_TYPE":
+                    return _identity != null ? _identity.AuthenticationType : base.GetServerVariable(name);
+                case "LOGON_USER":
+                    return _identity != null ? _identity.Name : base.GetServerVariable(name);
+            }
             return base.GetServerVariable(name);
         }
 
@@ -215,6 +240,12 @@ namespace Http.TestLibrary
         public override bool IsEntireEntityBodyIsPreloaded()
         {
             return true;
+        }
+
+        //GetLogonUserIdentity
+        public override IntPtr GetUserToken()
+        {
+            return _identity?.Token ?? base.GetUserToken();
         }
     }
 }
