@@ -166,6 +166,20 @@ namespace HttpSimulatorTests
 
         [Test]
         [Platform(Exclude = "Mono")]
+        public void CanSimulateResponseHeaders()
+        {
+            using (var simulator = new HttpSimulator())
+            {
+                simulator.SimulateRequest(new Uri("http://localhost/Test.aspx"), HttpVerb.GET);
+                HttpContext.Current.Response.AppendHeader("X-Content-Security-Policy", "frame-ancestors 'self'");
+                HttpContext.Current.Response.Flush();
+                Assert.IsNotEmpty(simulator.ResponseHeaders);
+                Assert.That(simulator.ResponseHeaders, Contains.Substring("X-Content-Security-Policy: frame-ancestors 'self'"));
+            }
+        }
+
+        [Test]
+        [Platform(Exclude = "Mono")]
         public void CanGetSetCookies() {
             using (var simulator = new HttpSimulator())
             {
