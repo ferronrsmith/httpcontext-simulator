@@ -138,6 +138,8 @@ namespace Http.TestLibrary
                 this.responseWriter = new StringWriter(builder);
             }
 
+            _responseHeadersBuilder = new StringBuilder();
+
             SetHttpRuntimeInternals();
 
             string query = ExtractQueryStringPart(url);
@@ -151,7 +153,7 @@ namespace Http.TestLibrary
             if (headers != null)
                 _headers.Add(headers);
 
-            this.workerRequest = new SimulatedHttpRequest(ApplicationPath, PhysicalApplicationPath, PhysicalPath, Page, query, this.responseWriter, host, port, httpVerb.ToString(), url);
+            this.workerRequest = new SimulatedHttpRequest(ApplicationPath, PhysicalApplicationPath, PhysicalPath, Page, query, this.responseWriter, host, port, httpVerb.ToString(), url, _responseHeadersBuilder);
 
             this.workerRequest.Form.Add(_formVars);
             this.workerRequest.Headers.Add(_headers);
@@ -722,6 +724,19 @@ namespace Http.TestLibrary
         }
 
         private TextWriter responseWriter;
+
+        /// <summary>
+        /// Returns the text from the response header to the simulated request.
+        /// </summary>
+        public string ResponseHeaders
+        {
+            get
+            {
+                return (_responseHeadersBuilder ?? new StringBuilder()).ToString();
+            }
+        }
+
+        private StringBuilder _responseHeadersBuilder;
 
         public SimulatedHttpRequest WorkerRequest
         {

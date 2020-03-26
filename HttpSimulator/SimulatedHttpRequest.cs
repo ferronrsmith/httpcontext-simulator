@@ -20,6 +20,7 @@ namespace Http.TestLibrary
         int _port;
         string _physicalFilePath;
         bool _isLocalRequest;
+        StringBuilder _responseHeaders;
 
         /// <summary>
         /// Creates a new <see cref="SimulatedHttpRequest"/> instance.
@@ -34,7 +35,7 @@ namespace Http.TestLibrary
         /// <param name="port">Port to request.</param>
         /// <param name="verb">The HTTP Verb to use.</param>
         /// <param name="url"></param>
-        public SimulatedHttpRequest(string applicationPath, string physicalAppPath, string physicalFilePath, string page, string query, TextWriter output, string host, int port, string verb, Uri url)
+        public SimulatedHttpRequest(string applicationPath, string physicalAppPath, string physicalFilePath, string page, string query, TextWriter output, string host, int port, string verb, Uri url, StringBuilder responseHeadersOutput)
             : base(applicationPath, physicalAppPath, page, query, output)
         {
             if (host == null)
@@ -51,6 +52,7 @@ namespace Http.TestLibrary
             _port = port;
             _physicalFilePath = physicalFilePath;
             this.Uri = url;
+            _responseHeaders = responseHeadersOutput;
         }
 
         internal void SetReferer(Uri referer)
@@ -258,5 +260,22 @@ namespace Http.TestLibrary
         {
             return _isLocalRequest ? "127.0.0.1" : "";
         }
+
+        public override void SendKnownResponseHeader(int index, string value)
+        {
+            _responseHeaders.Append(GetKnownResponseHeaderName(index));
+            _responseHeaders.Append(": ");
+            _responseHeaders.Append(value);
+            _responseHeaders.Append("\r\n");
+        }
+
+        public override void SendUnknownResponseHeader(string name, string value)
+        {
+            _responseHeaders.Append(name);
+            _responseHeaders.Append(": ");
+            _responseHeaders.Append(value);
+            _responseHeaders.Append("\r\n");
+        }
+
     }
 }

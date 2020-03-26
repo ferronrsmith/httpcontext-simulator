@@ -11,6 +11,7 @@ Can simulate:
 - cookie
 - browser capabilities
 - logon user identity
+- response headers
 
 ### Introduction
 The following shows how to use HttpSimulator?.
