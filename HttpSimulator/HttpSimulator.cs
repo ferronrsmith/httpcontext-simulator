@@ -166,8 +166,7 @@ namespace Http.TestLibrary
             if (_identity != null)
                 this.workerRequest.SetIdentity(_identity);
 
-            if(_isLocalRequest != null)
-                this.workerRequest.SetIsLocalRequest(_isLocalRequest);
+            this.workerRequest.SetIsLocalRequest(_isLocalRequest);
             
             InitializeSession();
 
